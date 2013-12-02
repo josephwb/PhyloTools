@@ -203,6 +203,9 @@ void processTrees (string & fileName, string & outName, bool & newick, bool & st
 	strippedTrees.open(outName.c_str());
 	
 	while (getline(treeInput, line)) {
+		if (line.empty()) {
+			continue;
+		}
 		// process character-by-character
 		if (parseString(line, 0) == "tree") {
 		//	cout << "Found a tree!" << endl;
