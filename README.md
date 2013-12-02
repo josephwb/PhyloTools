@@ -1,6 +1,6 @@
 This will be a place to put various small tools for phylogenetic analysis.
 
-At the moment, only one tool is here: StripTrease. This removes annotations from tree string for program which cannot handle annotations.
+At the moment, only one tool is here: StripTrease. This removes annotations from tree strings for program which cannot handle annotations.
 
 To compile, simply type:
 
