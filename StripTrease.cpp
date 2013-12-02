@@ -262,7 +262,7 @@ string stripTree (string & tree, bool & newick, bool & stripAll) {
 			cout << "Ack! Don't know how to deal with " << numElements << " tree elements!" << endl;
 		}
 	}
-	cout << "Cleaned tree: " << endl << res << endl;
+	//cout << "Cleaned tree: " << endl << res << endl;
 	return res;
 }
 
