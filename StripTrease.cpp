@@ -51,11 +51,11 @@ int main (int argc, char *argv[]) {
 void printProgramInfo() {
 	cout << endl << 
 	"************************************************" << endl <<
-	"             StripTrease version "   << version    << endl <<
+	"             StripTrease version " << version     << endl <<
 	"                Joseph W. Brown"                  << endl <<
 	"             University of Michigan"              << endl <<
 	"         Complaints: josephwb@umich.edu"          << endl <<
-	"                 " << month <<", " << year <<        endl << 
+	"                 " << month <<", " << year        << endl << 
 	"************************************************" << endl << endl;
 }
 
@@ -204,7 +204,10 @@ void processTrees (string & fileName, string & outName, bool & newick, bool & st
 	
 	while (getline(treeInput, line)) {
 		if (line.empty()) {
+	//		cout << "Empty line!" << endl;
 			continue;
+		} else {
+	//		cout << "Processing line: " << line << endl;
 		}
 		// process character-by-character
 		if (parseString(line, 0) == "tree") {
@@ -228,7 +231,6 @@ void processTrees (string & fileName, string & outName, bool & newick, bool & st
 		cout << endl << "Processed " << numTrees << " trees." << endl;
 	}
 }
-
 
 /* expecting format (5 elements):
 	tree treename = [&rooting] treestring;
@@ -268,7 +270,6 @@ string stripTree (string & tree, bool & newick, bool & stripAll) {
 	//cout << "Cleaned tree: " << endl << res << endl;
 	return res;
 }
-
 
 string removeAnnotations (string & tree, bool & stripAll) {
 	string cleaned = tree;
