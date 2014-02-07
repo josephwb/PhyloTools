@@ -335,22 +335,30 @@ string removeAnnotations (string & tree, bool & stripAll) {
 // take in a bracketed annotation e.g. [&height_95%_HPD={0.19508017007579698,0.35535530647436653},...,posterior=1.0,...]
 // add to charsToRemove vector all characters that are not the nodal support value.
 // this may be specified as 'posterior' (BEAST), 'label' (tree processed in FigTree), probably other junk.
+// apparently can also be 'prob' from some programs.
 // support value could be an integer or a float
 void keepSupportValue (string & annotation, int & start, vector <int> & charsToRemove) {
 	int supStop = 0;
 	int supStart = (int)annotation.size() - 1;
 	string temp;
-	size_t found = annotation.find("posterior");
+	size_t found = annotation.find("posterior=");
 	if (found != string::npos) {
 		supStart = (int)found + 10; // 10 is 'posterior='
 		found = annotation.find_first_not_of("0123456789.", supStart);
 		supStop = (int)found - 1;
 	} else {
-		found = annotation.find("label");
+		found = annotation.find("label=");
 		if (found != string::npos) {
 			supStart = (int)found + 6; // 6 is 'label='
 			found = annotation.find_first_not_of("0123456789.", supStart);
 			supStop = (int)found - 1;
+		} else {
+			found = annotation.find("prob=");
+			if (found != string::npos) {
+				supStart = (int)found + 5; // 5 is 'prob='
+				found = annotation.find_first_not_of("0123456789.", supStart);
+				supStop = (int)found - 1;
+			}
 		}
 	}
 	// add characters to be removed to vector
