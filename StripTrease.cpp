@@ -6,6 +6,8 @@ or with Makefile:
 make
 */
 
+// TODO: automatically detect Nexus
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -30,9 +32,9 @@ string removeAnnotations (string & tree, bool & stripAll);
 void keepSupportValue (string & annotation, int & start, vector <int> & charsToRemove);
 
 // version information
-double version = 0.1;
-string month = "November";
-int year = 2013;
+double version = 0.11;
+string month = "August";
+int year = 2016;
 
 int main (int argc, char *argv[]) {
 	printProgramInfo();
@@ -244,9 +246,9 @@ string stripTree (string & tree, bool & newick, bool & stripAll) {
 	vector <string> tokenizedString = tokenizeString(tree);
 	numElements = tokenizedString.size();
 	//cout << "Treestring contains "  << numElements << " elements." << endl;
-	res = tree;
+	res = tree; // why did i do this?!?
 	
-	if (newick) {
+	if (newick) { // this can only be 1 element, right?
 		if (numElements == 5) { // tree treename = [&rooting] treestring;
 			res = removeAnnotations(tokenizedString[4], stripAll);
 		} else if (numElements == 4) { // tree treename = treestring;
@@ -264,7 +266,23 @@ string stripTree (string & tree, bool & newick, bool & stripAll) {
 			res = tokenizedString[0] + " " + tokenizedString[1] + " " + tokenizedString[2] + 
 				" " + removeAnnotations(tokenizedString[3], stripAll);
 		} else {
-			cout << "Ack! Don't know how to deal with " << numElements << " tree elements!" << endl;
+			//cout << "Ack! Didn't expect to deal with " << numElements << " tree elements!" << endl;
+			//cout << "Assuming quoted labels (i.e. involves spaces)." << endl;
+			bool going = false;
+			res = "";
+			for (int i = 0; i < numElements; i++) {
+			    string terp = tokenizedString[i];
+			    if (going) {
+			        res += removeAnnotations(tokenizedString[i], stripAll) + " ";
+			    } else {
+			        if (terp[0] == '(') {
+			            res += removeAnnotations(tokenizedString[i], stripAll) + " ";
+			            going = true;
+			        } else {
+			            res += tokenizedString[i] + " ";
+			        }
+			    }
+			}
 		}
 	}
 	//cout << "Cleaned tree: " << endl << res << endl;
@@ -279,7 +297,6 @@ string removeAnnotations (string & tree, bool & stripAll) {
 	
 	int start = 0;
 	string temp;
-	
 	//cout << "tree: " << tree << endl;
 	
 // not very elegant...
@@ -290,7 +307,7 @@ string removeAnnotations (string & tree, bool & stripAll) {
 					going = false;
 					charsToRemove.push_back(i);
 					temp = cleaned.substr(start, (i - start + 1));
-			//		cout << "Annotation: " << temp << endl;
+					//cout << "Annotation: " << temp << endl;
 					continue;
 				} else {
 					charsToRemove.push_back(i);
@@ -313,7 +330,7 @@ string removeAnnotations (string & tree, bool & stripAll) {
 				if (cleaned[i] == ']') {
 					going = false;
 					temp = cleaned.substr(start, (i - start + 1));
-			//		cout << "Annotation: " << temp << "; start currently = " << start << endl;
+					//cout << "Annotation: " << temp << "; start currently = " << start << endl;
 					keepSupportValue(temp, start, charsToRemove);
 					continue;
 				}
@@ -343,6 +360,7 @@ void keepSupportValue (string & annotation, int & start, vector <int> & charsToR
 	string temp;
 	size_t found = annotation.find("posterior=");
 	if (found != string::npos) {
+	    //cout << "FOUND 'POSTERIOR'" << endl;
 		supStart = (int)found + 10; // 10 is 'posterior='
 		found = annotation.find_first_not_of("0123456789.", supStart);
 		supStop = (int)found - 1;
