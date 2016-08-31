@@ -6,7 +6,7 @@ or with Makefile:
 make
 */
 
-// TODO: automatically detect Nexus
+// TODO: automatically detect line ending flavour?
 
 #include <iostream>
 #include <sstream>
@@ -248,7 +248,7 @@ string stripTree (string & tree, bool & newick, bool & stripAll) {
 	//cout << "Treestring contains "  << numElements << " elements." << endl;
 	res = tree; // why did i do this?!?
 	
-	if (newick) { // this can only be 1 element, right?
+	if (newick) {
 		if (numElements == 5) { // tree treename = [&rooting] treestring;
 			res = removeAnnotations(tokenizedString[4], stripAll);
 		} else if (numElements == 4) { // tree treename = treestring;
