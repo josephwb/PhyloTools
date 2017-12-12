@@ -11,3 +11,8 @@ in a commandline prompt. All tools will (probably) use the same makefile. To get
 	./toolname -h
 
 As always, line breaks are assumed to be unix-flavoured.
+
+UPDATE
+--------------
+This is now implemented in the [phyx](https://github.com/FePhyFoFum/phyx) program `pxcltr`.
+
